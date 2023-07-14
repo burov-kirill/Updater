@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['update.py'],
+    ['C:/Users/k.burov/PycharmProjects/pythonProject/update.py'],
     pathex=[],
     binaries=[],
     datas=[],
