@@ -97,6 +97,7 @@ if not is_dir:
     subprocess.call(new_args)
 else:
     path = get_subpath(EXE_PATH, 1)
+    ROOT_PATH = get_subpath(PATH, 1)
     print(path)
     Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
     # os.mkdir('temp_folder')
@@ -105,11 +106,11 @@ else:
     ZIP_FULL_APP_NAME = f'{path}\\temp_folder\\{ZIP_NAME}'
     killProcess(pid)
     create_download_window(APP_URL, ZIP_FULL_APP_NAME)
-    shutil.rmtree(PATH)
-    FULL_APP_NAME = ''
-    os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
-    os.rmdir('temp_folder')
-    subprocess.run([f'{PATH}\\{APP_NAME}'])
+    shutil.rmtree(ROOT_PATH, APP_NAME[:APP_NAME.rfind('.')])
+    # FULL_APP_NAME = ''
+    # os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
+    # os.rmdir('temp_folder')
+    # subprocess.run([f'{PATH}\\{APP_NAME}'])
 
 
     # получить путь файла updater
