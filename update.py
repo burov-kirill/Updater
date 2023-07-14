@@ -68,9 +68,9 @@ def is_directory(path):
     else:
         return False
 
-def get_subpath(path, i):
+def get_subpath(path, i, symbol):
     while i > 0:
-        path = path[:path.rfind('/')]
+        path = path[:path.rfind(symbol)]
         i-=1
     return path
 
@@ -96,8 +96,8 @@ if not is_dir:
     new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
     subprocess.call(new_args)
 else:
-    path = get_subpath(EXE_PATH, 1)
-    ROOT_PATH = get_subpath(PATH, 1)
+    path = get_subpath(EXE_PATH, 1, '/')
+    ROOT_PATH = get_subpath(PATH, 1, '\\')
     print(path)
     Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
     # os.mkdir('temp_folder')
