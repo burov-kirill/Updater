@@ -7,6 +7,7 @@ import sys
 import threading
 import requests
 import shutil
+from pathlib import Path
 
 def download_file(window, APP_URL, APP_NAME):
     # auth = (LOGIN, ACCESSTOKEN)
@@ -67,6 +68,12 @@ def is_directory(path):
     else:
         return False
 
+def get_subpath(path, i):
+    while i > 0:
+        path = path[:path.rfind('\\')]
+        i-=1
+    return path
+
 # APP_URL = 'https://raw.githubusercontent.com/burov-kirill/CRMandAccount/master/dist/CRMandBIT.exe'
 # APP_NAME = f'CRMandBIT.exe'
 EXE_PATH = sys.argv[0]
@@ -89,12 +96,16 @@ if not is_dir:
     new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
     subprocess.call(new_args)
 else:
-    os.mkdir('temp_folder')
+    path = get_subpath(EXE_PATH, 1)
+    Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
+    # os.mkdir('temp_folder')
     UPD_PATH = os.path.abspath(__file__)
-    FULL_APP_NAME = f'{UPD_PATH}\\temp_folder\\{APP_NAME}'
+    ZIP_NAME = APP_NAME[:APP_NAME.rfind('.')] + '.7z'
+    ZIP_FULL_APP_NAME = f'{path}\\temp_folder\\{ZIP_NAME}'
     killProcess(pid)
-    create_download_window(APP_URL, FULL_APP_NAME)
-    shutil.rmtree(EXE_PATH[:EXE_PATH.rfind('\\')])
+    create_download_window(APP_URL, ZIP_FULL_APP_NAME)
+    shutil.rmtree(PATH)
+    FULL_APP_NAME = ''
     os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
     os.rmdir('temp_folder')
     subprocess.run([f'{PATH}\\{APP_NAME}'])
