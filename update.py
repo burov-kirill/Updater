@@ -70,7 +70,7 @@ def is_directory(path):
 
 def get_subpath(path, i):
     while i > 0:
-        path = path[:path.rfind('\\')]
+        path = path[:path.rfind('/')]
         i-=1
     return path
 
