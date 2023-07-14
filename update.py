@@ -97,6 +97,7 @@ if not is_dir:
     subprocess.call(new_args)
 else:
     path = get_subpath(EXE_PATH, 1)
+    print(path)
     Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
     # os.mkdir('temp_folder')
     UPD_PATH = os.path.abspath(__file__)
