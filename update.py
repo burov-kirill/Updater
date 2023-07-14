@@ -85,7 +85,9 @@ if not is_dir:
     os.remove(f'{PATH}\\{APP_NAME}')
     os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
     os.rmdir('temp_folder')
-    subprocess.run([f'{PATH}\\{APP_NAME}'])
+    new_pid = str(os.getpid())
+    new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
+    subprocess.call(new_args)
 else:
     os.mkdir('temp_folder')
     UPD_PATH = os.path.abspath(__file__)
