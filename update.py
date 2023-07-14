@@ -106,7 +106,7 @@ else:
     ZIP_FULL_APP_NAME = f'{path}\\temp_folder\\{ZIP_NAME}'
     killProcess(pid)
     create_download_window(APP_URL, ZIP_FULL_APP_NAME)
-    shutil.rmtree(ROOT_PATH, APP_NAME[:APP_NAME.rfind('.')])
+    shutil.rmtree(ROOT_PATH)
     # FULL_APP_NAME = ''
     # os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
     # os.rmdir('temp_folder')
