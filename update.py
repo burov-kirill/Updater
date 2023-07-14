@@ -1,0 +1,111 @@
+import os
+import ast
+import subprocess
+from time import sleep
+import PySimpleGUI as sg
+import sys
+import threading
+import requests
+import shutil
+
+def download_file(window, APP_URL, APP_NAME):
+    # auth = (LOGIN, ACCESSTOKEN)
+    # with urllib.request.urlopen(APP_URL, context=context) as r:
+    with requests.get(APP_URL, stream=True) as r:
+        chunk_size = 64*1024
+        total_length = int(r.headers.get('content-length'))
+        total = total_length//chunk_size if total_length % chunk_size == 0 else total_length//chunk_size + 1
+        with open(APP_NAME, 'wb') as f:
+            for i, chunk in enumerate(r.iter_content(chunk_size=chunk_size)):
+                f.write(chunk)
+                PERCENT = int((i+1)/total*100)
+                window.write_event_value('Next', PERCENT)
+
+
+def create_download_window(APP_URL, APP_NAME):
+    progress_bar = [
+        [sg.ProgressBar(100, size=(40, 20), pad=(0, 0), key='Progress Bar', border_width = 0),
+         sg.Text("  0%", size=(4, 1), key='Percent', background_color='#007bfb', border_width=0), ],
+    ]
+
+    layout = [
+        [sg.pin(sg.Column(progress_bar, key='Progress', visible=True, background_color='#007bfb',
+                          pad=(0, 0), element_justification='center'))],
+    ]
+    window = sg.Window('Загрузка', layout, size=(600, 40), finalize=True,
+                       use_default_focus=False, background_color='#007bfb')
+    progress_bar = window['Progress Bar']
+    percent = window['Percent']
+    # progressB = window['Progress']
+    default_event = True
+    while True:
+        event, values = window.read(timeout=10)
+        if event == sg.WINDOW_CLOSED:
+            break
+        elif default_event:
+            default_event = False
+            progress_bar.update(current_count=0, max=100)
+            thread = threading.Thread(target=download_file, args=(window, APP_URL, APP_NAME), daemon=True)
+            thread.start()
+        elif event == 'Next':
+            count = values[event]
+            progress_bar.update(current_count=count)
+            percent.update(value=f'{count:>3d}%')
+            window.refresh()
+            if count == 100:
+                sleep(1)
+                break
+    window.close()
+
+def killProcess(pid):
+    subprocess.Popen('taskkill /F /PID {0}'.format(pid, shell=True))
+
+def is_directory(path):
+    onlyfiles = [f[f.rfind('.')+1:] for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    if any(map(lambda x: x == 'pyd')):
+        return True
+    else:
+        return False
+
+# APP_URL = 'https://raw.githubusercontent.com/burov-kirill/CRMandAccount/master/dist/CRMandBIT.exe'
+# APP_NAME = f'CRMandBIT.exe'
+EXE_PATH = sys.argv[0]
+APP_URL = sys.argv[2]
+APP_NAME = sys.argv[3]
+pid = int(sys.argv[4])
+PATH = sys.argv[5]
+is_dir = ast.literal_eval(sys.argv[6])
+if not is_dir:
+    # Если вызывается из папки с содержымым остальным, то папку создаем на уровень выше
+    os.mkdir('temp_folder')
+    FULL_APP_NAME = f'{PATH}\\temp_folder\\{APP_NAME}'
+    killProcess(pid)
+    create_download_window(APP_URL, FULL_APP_NAME)
+    # удаление предполагает, что удаляется файл, а не папка с содержимым
+    os.remove(f'{PATH}\\{APP_NAME}')
+    os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
+    os.rmdir('temp_folder')
+    subprocess.run([f'{PATH}\\{APP_NAME}'])
+else:
+    os.mkdir('temp_folder')
+    UPD_PATH = os.path.abspath(__file__)
+    FULL_APP_NAME = f'{UPD_PATH}\\temp_folder\\{APP_NAME}'
+    killProcess(pid)
+    create_download_window(APP_URL, FULL_APP_NAME)
+    shutil.rmtree(EXE_PATH[:EXE_PATH.rfind('\\')])
+    os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
+    os.rmdir('temp_folder')
+    subprocess.run([f'{PATH}\\{APP_NAME}'])
+
+
+    # получить путь файла updater
+    # создать полное имя файла загрузки
+    # убить процесс
+    # загрузить новый файл
+    # удалить папку со всем содержимым
+    # переместить папку из темп фолдер на уровень выше
+    # удалить временную папку
+    # запустить процесс
+
+
+
