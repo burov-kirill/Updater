@@ -97,7 +97,7 @@ if not is_dir:
     subprocess.call(new_args)
 else:
     path = get_subpath(EXE_PATH, 1, '/')
-    ROOT_PATH = get_subpath(PATH, 1, '\\')
+    # ROOT_PATH = get_subpath(PATH, 1, '\\')
     print(path)
     Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
     # os.mkdir('temp_folder')
@@ -106,7 +106,11 @@ else:
     ZIP_FULL_APP_NAME = f'{path}\\temp_folder\\{ZIP_NAME}'
     killProcess(pid)
     create_download_window(APP_URL, ZIP_FULL_APP_NAME)
-    shutil.rmtree(ROOT_PATH)
+    shutil.rmtree(PATH)
+    # добавить распаковку архива
+    # переместить загруженный и распакованный скрипт
+    # удалить пустую папку
+    # вызвать скрипт
     # FULL_APP_NAME = ''
     # os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
     # os.rmdir('temp_folder')
