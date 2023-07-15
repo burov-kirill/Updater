@@ -106,6 +106,7 @@ else:
     ZIP_FULL_APP_NAME = f'{path}\\temp_folder\\{ZIP_NAME}'
     killProcess(pid)
     create_download_window(APP_URL, ZIP_FULL_APP_NAME)
+    sleep(5)
     shutil.rmtree(PATH)
     # добавить распаковку архива
     # переместить загруженный и распакованный скрипт
