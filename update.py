@@ -114,37 +114,14 @@ else:
 
     with py7zr.SevenZipFile(ZIP_FULL_APP_NAME, mode='r') as z:
         z.extractall()
-
     file_names = os.listdir(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}")
     for file_name in file_names:
         shutil.move(os.path.join(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}", file_name), PATH)
 
-    # try:
-    #     shutil.rmtree(PATH, ignore_errors=True)
-    # except Exception as exp:
-    #     sg.PopupOK(f'Ошибка процесса {PATH}')
-    #     Path(f'{PATH}\\new_dir').mkdir(parents=True, exist_ok=True)
-    # else:
-    #     pass
-    #     # open_files(PATH)
-    #     # Path(PATH).rmdir()
-
-    # добавить распаковку архива
-    # переместить загруженный и распакованный скрипт
-    # удалить пустую папку
-    # вызвать скрипт
-    # FULL_APP_NAME = ''
-    # os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
-    # os.rmdir('temp_folder')
-    # subprocess.run([f'{PATH}\\{APP_NAME}'])
-
-
-    # получить путь файла updater
-    # создать полное имя файла загрузки
-    # убить процесс
-    # загрузить новый файл
-    # удалить папку со всем содержимым
-    # переместить папку из темп фолдер на уровень выше
+    shutil.rmtree(f'{path}\\temp_folder')
+    new_pid = str(os.getpid())
+    new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
+    subprocess.call(new_args)
     # удалить временную папку
     # запустить процесс
 
