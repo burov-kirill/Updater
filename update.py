@@ -116,6 +116,9 @@ else:
     with py7zr.SevenZipFile(ZIP_FULL_APP_NAME, mode='r') as z:
         z.extractall()
 
+    file_names = os.listdir(f"{ZIP_FULL_APP_NAME}\\{APP_NAME[:APP_NAME.rfind('.')]}")
+    for file_name in file_names:
+        shutil.move(os.path.join(f"{ZIP_FULL_APP_NAME}\\{APP_NAME[:APP_NAME.rfind('.')]}", file_name), PATH)
 
     # try:
     #     shutil.rmtree(PATH, ignore_errors=True)
