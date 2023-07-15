@@ -77,6 +77,8 @@ def get_subpath(path, i, symbol):
 
 # APP_URL = 'https://raw.githubusercontent.com/burov-kirill/CRMandAccount/master/dist/CRMandBIT.exe'
 # APP_NAME = f'CRMandBIT.exe'
+
+
 EXE_PATH = sys.argv[0]
 APP_URL = sys.argv[2]
 APP_NAME = sys.argv[3]
@@ -101,6 +103,7 @@ else:
     # ROOT_PATH = get_subpath(PATH, 1, '\\')
     print(path)
     Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
+    os.chdir(f'{path}\\temp_folder')
     # os.mkdir('temp_folder')
     UPD_PATH = os.path.abspath(__file__)
     ZIP_NAME = APP_NAME[:APP_NAME.rfind('.')] + '.7z'
