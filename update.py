@@ -74,6 +74,20 @@ def get_subpath(path, i, symbol):
         i-=1
     return path
 
+
+import re
+import subprocess
+
+
+
+def open_files(name):
+    _handle_pat = re.compile(r'(.*?)\s+pid:\s+(\d+).*[0-9a-fA-F]+:\s+(.*)')
+    """return a list of (process_name, pid, filename) tuples for
+       open files matching the given name."""
+    lines = subprocess.check_output('handle.exe "%s"' % name).splitlines()
+    results = (_handle_pat.match(line.decode('mbcs')) for line in lines)
+    return [m.groups() for m in results if m]
+
 # APP_URL = 'https://raw.githubusercontent.com/burov-kirill/CRMandAccount/master/dist/CRMandBIT.exe'
 # APP_NAME = f'CRMandBIT.exe'
 EXE_PATH = sys.argv[0]
@@ -113,7 +127,8 @@ else:
         sg.PopupOK(f'Ошибка процесса {PATH}')
         Path(PATH).rmdir()
     else:
-        Path(PATH).rmdir()
+        open_files(PATH)
+        # Path(PATH).rmdir()
 
     # добавить распаковку архива
     # переместить загруженный и распакованный скрипт
