@@ -59,7 +59,7 @@ def create_download_window(APP_URL, APP_NAME):
     window.close()
 
 def killProcess(pid):
-    subprocess.Popen('taskkill /F /PID {0}'.format(pid, shell=True))
+    subprocess.Popen('taskkill /T /PID {0}'.format(pid, shell=True))
 
 def is_directory(path):
     onlyfiles = [f[f.rfind('.')+1:] for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
@@ -108,15 +108,18 @@ else:
     killProcess(pid)
     create_download_window(APP_URL, ZIP_FULL_APP_NAME)
     sleep(5)
-    try:
-        shutil.rmtree(PATH, ignore_errors=False)
-    except Exception as exp:
-        sg.PopupOK(f'Ошибка процесса {PATH}')
-        Path(f'{PATH}\\new_dir').mkdir(parents=True, exist_ok=True)
-    else:
-        pass
-        # open_files(PATH)
-        # Path(PATH).rmdir()
+    shutil.rmtree(PATH, ignore_errors=True)
+
+
+    # try:
+    #     shutil.rmtree(PATH, ignore_errors=True)
+    # except Exception as exp:
+    #     sg.PopupOK(f'Ошибка процесса {PATH}')
+    #     Path(f'{PATH}\\new_dir').mkdir(parents=True, exist_ok=True)
+    # else:
+    #     pass
+    #     # open_files(PATH)
+    #     # Path(PATH).rmdir()
 
     # добавить распаковку архива
     # переместить загруженный и распакованный скрипт
