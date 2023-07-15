@@ -115,10 +115,12 @@ else:
     with py7zr.SevenZipFile(ZIP_FULL_APP_NAME, mode='r') as z:
         z.extractall()
     file_names = os.listdir(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}")
+
     for file_name in file_names:
         shutil.move(os.path.join(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}", file_name), PATH)
 
-    shutil.rmtree(f'{path}\\temp_folder')
+    shutil.rmtree(f'{path}\\temp_folder', ignore_errors=True)
+    os.chdir(f'{path}')
     new_pid = str(os.getpid())
     new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
     subprocess.call(new_args)
