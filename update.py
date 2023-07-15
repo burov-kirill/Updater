@@ -108,10 +108,12 @@ else:
     create_download_window(APP_URL, ZIP_FULL_APP_NAME)
     sleep(5)
     try:
-        shutil.rmtree(PATH)
+        shutil.rmtree(PATH, ignore_errors=True)
     except Exception as exp:
         sg.PopupOK(f'Ошибка процесса {PATH}')
-        shutil.rmtree(PATH)
+        Path(PATH).rmdir()
+    else:
+        Path(PATH).rmdir()
 
     # добавить распаковку архива
     # переместить загруженный и распакованный скрипт
