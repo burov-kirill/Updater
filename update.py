@@ -8,7 +8,7 @@ import threading
 import requests
 import shutil
 from pathlib import Path
-
+import py7zr
 def download_file(window, APP_URL, APP_NAME):
     # auth = (LOGIN, ACCESSTOKEN)
     # with urllib.request.urlopen(APP_URL, context=context) as r:
@@ -59,7 +59,7 @@ def create_download_window(APP_URL, APP_NAME):
     window.close()
 
 def killProcess(pid):
-    subprocess.Popen('taskkill /T /PID {0}'.format(pid, shell=True))
+    subprocess.Popen('taskkill /F /PID {0}'.format(pid, shell=True))
 
 def is_directory(path):
     onlyfiles = [f[f.rfind('.')+1:] for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
@@ -109,6 +109,9 @@ else:
     create_download_window(APP_URL, ZIP_FULL_APP_NAME)
     sleep(5)
     shutil.rmtree(PATH, ignore_errors=True)
+
+    with py7zr.SevenZipFile(ZIP_FULL_APP_NAME, mode='r') as z:
+        z.extractall()
 
 
     # try:
