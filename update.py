@@ -110,7 +110,7 @@ else:
     ZIP_FULL_APP_NAME = f'{path}\\temp_folder\\{ZIP_NAME}'
     killProcess(pid)
     create_download_window(APP_URL, ZIP_FULL_APP_NAME)
-    sleep(5)
+    sg.PopupOK(f'{os.path.abspath(os.curdir)}')
     shutil.rmtree(PATH, ignore_errors=True)
 
     with py7zr.SevenZipFile(ZIP_FULL_APP_NAME, mode='r') as z:
