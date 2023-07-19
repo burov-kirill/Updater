@@ -99,7 +99,7 @@ is_dir = ast.literal_eval(sys.argv[6])
 #     new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
 #     subprocess.call(new_args)
 # else:
-path = get_subpath(EXE_PATH, 1, '/')
+path = get_subpath(EXE_PATH, 2, '/')
 # ROOT_PATH = get_subpath(PATH, 1, '\\')
 print(path)
 Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
@@ -118,7 +118,6 @@ file_names = os.listdir(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}"
 
 for file_name in file_names:
     shutil.move(os.path.join(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}", file_name), PATH)
-
 shutil.rmtree(f'{path}\\temp_folder', ignore_errors=True)
 os.chdir(f'{path}')
 new_pid = str(os.getpid())
