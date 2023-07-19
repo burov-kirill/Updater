@@ -63,7 +63,7 @@ def killProcess(pid):
 
 def is_directory(path):
     onlyfiles = [f[f.rfind('.')+1:] for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-    if any(map(lambda x: x == 'pyd')):
+    if any(map(lambda x: x == 'pyd', onlyfiles)):
         return True
     else:
         return False
@@ -85,47 +85,47 @@ APP_NAME = sys.argv[3]
 pid = int(sys.argv[4])
 PATH = sys.argv[5]
 is_dir = ast.literal_eval(sys.argv[6])
-if not is_dir:
-    # Если вызывается из папки с содержымым остальным, то папку создаем на уровень выше
-    os.mkdir('temp_folder')
-    FULL_APP_NAME = f'{PATH}\\temp_folder\\{APP_NAME}'
-    killProcess(pid)
-    create_download_window(APP_URL, FULL_APP_NAME)
-    # удаление предполагает, что удаляется файл, а не папка с содержимым
-    os.remove(f'{PATH}\\{APP_NAME}')
-    os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
-    os.rmdir('temp_folder')
-    new_pid = str(os.getpid())
-    new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
-    subprocess.call(new_args)
-else:
-    path = get_subpath(EXE_PATH, 1, '/')
-    # ROOT_PATH = get_subpath(PATH, 1, '\\')
-    print(path)
-    Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
-    os.chdir(f'{path}\\temp_folder')
-    # os.mkdir('temp_folder')
-    UPD_PATH = os.path.abspath(__file__)
-    ZIP_NAME = APP_NAME[:APP_NAME.rfind('.')] + '.7z'
-    ZIP_FULL_APP_NAME = f'{path}\\temp_folder\\{ZIP_NAME}'
-    killProcess(pid)
-    create_download_window(APP_URL, ZIP_FULL_APP_NAME)
-    shutil.rmtree(PATH, ignore_errors=True)
+# if not is_dir:
+#     # Если вызывается из папки с содержымым остальным, то папку создаем на уровень выше
+#     os.mkdir('temp_folder')
+#     FULL_APP_NAME = f'{PATH}\\temp_folder\\{APP_NAME}'
+#     killProcess(pid)
+#     create_download_window(APP_URL, FULL_APP_NAME)
+#     # удаление предполагает, что удаляется файл, а не папка с содержимым
+#     os.remove(f'{PATH}\\{APP_NAME}')
+#     os.replace(FULL_APP_NAME, f'{PATH}\\{APP_NAME}')
+#     os.rmdir('temp_folder')
+#     new_pid = str(os.getpid())
+#     new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
+#     subprocess.call(new_args)
+# else:
+path = get_subpath(EXE_PATH, 1, '/')
+# ROOT_PATH = get_subpath(PATH, 1, '\\')
+print(path)
+Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
+os.chdir(f'{path}\\temp_folder')
+# os.mkdir('temp_folder')
+UPD_PATH = os.path.abspath(__file__)
+ZIP_NAME = APP_NAME[:APP_NAME.rfind('.')] + '.7z'
+ZIP_FULL_APP_NAME = f'{path}\\temp_folder\\{ZIP_NAME}'
+killProcess(pid)
+create_download_window(APP_URL, ZIP_FULL_APP_NAME)
+shutil.rmtree(PATH, ignore_errors=True)
 
-    with py7zr.SevenZipFile(ZIP_FULL_APP_NAME, mode='r') as z:
-        z.extractall()
-    file_names = os.listdir(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}")
+with py7zr.SevenZipFile(ZIP_FULL_APP_NAME, mode='r') as z:
+    z.extractall()
+file_names = os.listdir(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}")
 
-    for file_name in file_names:
-        shutil.move(os.path.join(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}", file_name), PATH)
+for file_name in file_names:
+    shutil.move(os.path.join(f"{path}\\temp_folder\\{APP_NAME[:APP_NAME.rfind('.')]}", file_name), PATH)
 
-    shutil.rmtree(f'{path}\\temp_folder', ignore_errors=True)
-    os.chdir(f'{path}')
-    new_pid = str(os.getpid())
-    new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
-    subprocess.call(new_args)
-    # удалить временную папку
-    # запустить процесс
+shutil.rmtree(f'{path}\\temp_folder', ignore_errors=True)
+os.chdir(f'{path}')
+new_pid = str(os.getpid())
+new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
+subprocess.call(new_args)
+# удалить временную папку
+# запустить процесс
 
 
 
