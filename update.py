@@ -84,7 +84,6 @@ APP_URL = sys.argv[2]
 APP_NAME = sys.argv[3]
 pid = int(sys.argv[4])
 PATH = sys.argv[5]
-is_dir = ast.literal_eval(sys.argv[6])
 # if not is_dir:
 #     # Если вызывается из папки с содержымым остальным, то папку создаем на уровень выше
 #     os.mkdir('temp_folder')
