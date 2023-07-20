@@ -100,7 +100,6 @@ PATH = sys.argv[5]
 # else:
 path = get_subpath(EXE_PATH, 1, '/')
 # ROOT_PATH = get_subpath(PATH, 1, '\\')
-print(path)
 Path(f'{path}\\temp_folder').mkdir(parents=True, exist_ok=True)
 os.chdir(f'{path}\\temp_folder')
 # os.mkdir('temp_folder')
@@ -120,7 +119,7 @@ for file_name in file_names:
 shutil.rmtree(f'{path}\\temp_folder', ignore_errors=True)
 os.chdir(f'{path}')
 new_pid = str(os.getpid())
-new_args = f'{PATH}\\{APP_NAME} -config {new_pid}'
+new_args = f'"{PATH}\\{APP_NAME}" -config {new_pid}'
 subprocess.call(new_args)
 # удалить временную папку
 # запустить процесс
